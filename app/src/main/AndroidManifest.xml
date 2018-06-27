@@ -22,6 +22,11 @@
             android:parentActivityName="com.example.android.movielist.MainActivity"
             >
         </activity>
+        <!--https://guides.codepath.com/android/Creating-Content-Providers-->
+        <provider
+            android:name="com.example.android.movielist.data.MovieContentProvider"
+            android:authorities="com.example.android.movielist"
+            android:exported="false"/>
     </application>
 
 </manifest>

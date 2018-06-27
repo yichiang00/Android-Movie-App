@@ -28,4 +28,10 @@
         android:orderInCategory="1"
         app:showAsAction="ifRoom"
         android:title="@string/action_toprated"/>
+    <item
+        android:id="@+id/action_favorite"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_favorite"/>
 </menu>
+

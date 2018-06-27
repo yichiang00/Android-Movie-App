@@ -17,6 +17,7 @@ package com.example.android.movielist.utilities;
 
 import android.net.Uri;
 import android.support.graphics.drawable.animated.BuildConfig;
+import com.example.android.movielist.Model.EnumModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,18 +31,26 @@ public class NetworkUtils {
     final static String MOVIEDB_BASE_URL =
             "https://api.themoviedb.org/3/";
 
+    final static String MOVIEDB_SCHEMA =
+            "https";
+    final static String MOVIEDB_AUTH =
+            "api.themoviedb.org";
+
     final static String PARAM_QUERY = "page";
 
+    final static String YOUTUBE_BASE_URL =
+            "https://www.youtube.com/watch?v=";
 
     /*
         * https://developers.themoviedb.org/3/movies/get-popular-movies
      */
     public final static String POPULAR_ENDPOINT = "movie/popular?";
     public final static String TOPRATED_ENDPOINT = "movie/top_rated?";
+    public final static String SINGLE_MOVIE_ENDPOINT = "movie/";
 
 
     final static String APIKEY_QUERY = "api_key";
-    final static String APIKEY = com.example.android.movielist.BuildConfig.ApiKey;
+    final static String APIKEY = "40fdf4049fe8106725ca72d62a1a2dce";
 
     public static URL buildUrl(String movieSearchQuery, String enpoints) {
         Uri builtUri = Uri.parse(MOVIEDB_BASE_URL + enpoints).buildUpon()
@@ -59,6 +68,47 @@ public class NetworkUtils {
         return url;
     }
 
+    public static URL builSingleMoviedUrl(String enpoints) {
+        Uri builtUri = Uri.parse(MOVIEDB_BASE_URL + enpoints).buildUpon()
+                .appendQueryParameter(APIKEY_QUERY, APIKEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    /*
+        Review: https://developers.themoviedb.org/3/movies/get-movie-reviews
+        Trailer:
+        Url Builder
+        Source: https://stackoverflow.com/questions/19167954/use-uri-builder-in-android-or-create-url-with-variables
+     */
+    public static URL buildUrlByMovieId(Integer moiveId, EnumModel.QueryItemType movieDetailType) {
+
+        Uri.Builder builtUri = new Uri.Builder();
+        builtUri.scheme(MOVIEDB_SCHEMA)
+                .authority(MOVIEDB_AUTH)
+                .appendPath("3")
+                .appendPath("movie")
+                .appendPath(moiveId.toString())
+                .appendPath(movieDetailType.toString())
+                .appendQueryParameter(APIKEY_QUERY, APIKEY);
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.build().toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -77,5 +127,10 @@ public class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
+    }
+
+    public static String getVideoUrl(String videoKey)
+    {
+        return YOUTUBE_BASE_URL + videoKey;
     }
 }
